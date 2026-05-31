@@ -47,7 +47,7 @@ class EpisodeRepository(
                 val info = StreamInfo.getInfo(ServiceList.YouTube, url)
 
                 if (info.streamType == StreamType.LIVE_STREAM) {
-                    throw IllegalStateException("Les lives ne sont pas pris en charge")
+                    throw IllegalStateException("Live streams are not supported")
                 }
 
                 Log.d("Sobre", "StreamType: ${info.streamType}")
@@ -70,7 +70,7 @@ class EpisodeRepository(
 
                 val audioUrl = resolveAudioUrl(info)
                 Log.d("Sobre", "Resolved audio URL: ${audioUrl?.take(80)}")
-                audioUrl ?: throw IllegalStateException("Aucun flux audio disponible")
+                audioUrl ?: throw IllegalStateException("No audio stream available")
 
                 val chapters = info.streamSegments.map { seg ->
                     Chapter(title = seg.title, startTimeSec = seg.startTimeSeconds)
@@ -97,7 +97,7 @@ class EpisodeRepository(
             val info = StreamInfo.getInfo(ServiceList.YouTube, url)
 
             val downloadUrl = resolveAudioUrl(info)
-                ?: throw IllegalStateException("Aucun flux telechargeable")
+                ?: throw IllegalStateException("No downloadable stream")
 
             val ext = "m4a"
             val file = File(audioDir, "$videoId.$ext")

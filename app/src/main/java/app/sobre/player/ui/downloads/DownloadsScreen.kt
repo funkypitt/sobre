@@ -40,7 +40,7 @@ fun DownloadsScreen(
 
     if (episodes.isEmpty()) {
         Text(
-            text = "Aucun téléchargement.",
+            text = "No downloads.",
             modifier = Modifier.padding(24.dp),
             style = MaterialTheme.typography.bodyLarge
         )
@@ -87,19 +87,19 @@ fun DownloadsScreen(
     episodeToDelete?.let { episode ->
         AlertDialog(
             onDismissRequest = { episodeToDelete = null },
-            title = { Text("Supprimer le téléchargement") },
-            text = { Text("Supprimer « ${episode.title} » du stockage local ?") },
+            title = { Text("Delete download") },
+            text = { Text("Delete \"${episode.title}\" from local storage?") },
             confirmButton = {
                 TextButton(onClick = {
                     viewModel.deleteDownload(episode.videoId)
                     episodeToDelete = null
                 }) {
-                    Text("Supprimer")
+                    Text("Delete")
                 }
             },
             dismissButton = {
                 TextButton(onClick = { episodeToDelete = null }) {
-                    Text("Annuler")
+                    Text("Cancel")
                 }
             }
         )

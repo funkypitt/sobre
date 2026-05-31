@@ -165,7 +165,7 @@ fun TabsScreen(
     onImport: () -> Unit
 ) {
     var selectedTab by rememberSaveable { mutableIntStateOf(0) }
-    val tabTitles = listOf("Flux", "Chaines", "Telecharges")
+    val tabTitles = listOf("Feed", "Channels", "Downloads")
 
     Scaffold { innerPadding ->
         Column(
@@ -209,14 +209,14 @@ fun TabsScreen(
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp, vertical = 4.dp),
                     ) {
-                        Text("+ Ajouter une chaine")
+                        Text("+ Add channel")
                     }
                     Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp)) {
                         TextButton(onClick = onExport, modifier = Modifier.weight(1f)) {
-                            Text("Exporter OPML")
+                            Text("Export OPML")
                         }
                         TextButton(onClick = onImport, modifier = Modifier.weight(1f)) {
-                            Text("Importer OPML")
+                            Text("Import OPML")
                         }
                     }
                 }

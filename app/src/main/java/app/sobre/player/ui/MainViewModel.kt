@@ -57,7 +57,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             val result = subscriptionRepo.subscribe(url)
             _subscribeStatus.value = result.fold(
                 onSuccess = { SubscribeStatus.Success(it.title) },
-                onFailure = { SubscribeStatus.Error(it.message ?: "Erreur inconnue") }
+                onFailure = { SubscribeStatus.Error(it.message ?: "Unknown error") }
             )
         }
     }

@@ -7,26 +7,26 @@ fun relativeTime(timestampMs: Long): String {
     val now = System.currentTimeMillis()
     val diff = now - timestampMs
     return when {
-        diff < TimeUnit.MINUTES.toMillis(1) -> "a l'instant"
+        diff < TimeUnit.MINUTES.toMillis(1) -> "just now"
         diff < TimeUnit.HOURS.toMillis(1) -> {
             val m = TimeUnit.MILLISECONDS.toMinutes(diff)
-            "il y a ${m} min"
+            "${m}m ago"
         }
         diff < TimeUnit.DAYS.toMillis(1) -> {
             val h = TimeUnit.MILLISECONDS.toHours(diff)
-            "il y a ${h} h"
+            "${h}h ago"
         }
         diff < TimeUnit.DAYS.toMillis(30) -> {
             val d = TimeUnit.MILLISECONDS.toDays(diff)
-            "il y a ${d} j"
+            "${d}d ago"
         }
         diff < TimeUnit.DAYS.toMillis(365) -> {
             val m = TimeUnit.MILLISECONDS.toDays(diff) / 30
-            "il y a ${m} mois"
+            "${m}mo ago"
         }
         else -> {
             val y = TimeUnit.MILLISECONDS.toDays(diff) / 365
-            "il y a ${y} an${if (y > 1) "s" else ""}"
+            "${y}y ago"
         }
     }
 }

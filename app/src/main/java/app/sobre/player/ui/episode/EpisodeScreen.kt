@@ -83,12 +83,12 @@ fun EpisodeScreen(
             .padding(start = 24.dp, end = 24.dp, bottom = 24.dp, top = 48.dp)
     ) {
         if (loading) {
-            Text("Chargement…", style = MaterialTheme.typography.bodyLarge)
+            Text("Loading…", style = MaterialTheme.typography.bodyLarge)
             return@Column
         }
 
         error?.let {
-            Text("Erreur : $it", style = MaterialTheme.typography.bodyLarge)
+            Text("Error: $it", style = MaterialTheme.typography.bodyLarge)
             return@Column
         }
 
@@ -120,10 +120,10 @@ fun EpisodeScreen(
         // Download button
         if (!ep.isDownloaded) {
             TextButton(onClick = { viewModel.downloadEpisode(videoId) }) {
-                Text("Telecharger")
+                Text("Download")
             }
         } else {
-            Text("Telecharge", style = MaterialTheme.typography.labelLarge)
+            Text("Downloaded", style = MaterialTheme.typography.labelLarge)
         }
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -142,7 +142,7 @@ fun EpisodeScreen(
         val chapters = streamDetails?.chapters ?: emptyList()
         if (chapters.isNotEmpty()) {
             Spacer(modifier = Modifier.height(24.dp))
-            Text("Chapitres", style = MaterialTheme.typography.titleLarge)
+            Text("Chapters", style = MaterialTheme.typography.titleLarge)
             Spacer(modifier = Modifier.height(8.dp))
             chapters.forEach { chapter ->
                 Text(

@@ -36,7 +36,7 @@ fun ChannelsScreen(
 
     if (channels.isEmpty()) {
         Text(
-            text = "Aucun abonnement. Ajoutez une chaîne avec le bouton ci-dessous.",
+            text = "No subscriptions yet. Add a channel using the button below.",
             modifier = Modifier.padding(24.dp),
             style = MaterialTheme.typography.bodyLarge
         )
@@ -73,19 +73,19 @@ fun ChannelsScreen(
     channelToDelete?.let { channel ->
         AlertDialog(
             onDismissRequest = { channelToDelete = null },
-            title = { Text("Se désabonner") },
-            text = { Text("Se désabonner de ${channel.title} ?") },
+            title = { Text("Unsubscribe") },
+            text = { Text("Unsubscribe from ${channel.title}?") },
             confirmButton = {
                 TextButton(onClick = {
                     viewModel.unsubscribe(channel.channelId)
                     channelToDelete = null
                 }) {
-                    Text("Désabonner")
+                    Text("Unsubscribe")
                 }
             },
             dismissButton = {
                 TextButton(onClick = { channelToDelete = null }) {
-                    Text("Annuler")
+                    Text("Cancel")
                 }
             }
         )

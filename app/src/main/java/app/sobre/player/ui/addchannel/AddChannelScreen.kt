@@ -35,14 +35,14 @@ fun AddChannelScreen(
             .padding(24.dp)
     ) {
         Text(
-            text = "Ajouter une chaine",
+            text = "Add a channel",
             style = MaterialTheme.typography.headlineMedium
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = "Collez l'URL d'une chaine ou d'une video YouTube.",
+            text = "Paste a channel or video URL from YouTube.",
             style = MaterialTheme.typography.bodyMedium
         )
 
@@ -66,15 +66,15 @@ fun AddChannelScreen(
             },
             enabled = status !is SubscribeStatus.Loading
         ) {
-            Text("Ajouter")
+            Text("Add")
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
         when (val s = status) {
-            is SubscribeStatus.Loading -> Text("Resolution…")
+            is SubscribeStatus.Loading -> Text("Resolving…")
             is SubscribeStatus.Success -> {
-                Text("Abonne a ${s.channelTitle}")
+                Text("Subscribed to ${s.channelTitle}")
                 Spacer(modifier = Modifier.height(8.dp))
                 TextButton(onClick = {
                     viewModel.resetSubscribeStatus()
@@ -84,10 +84,10 @@ fun AddChannelScreen(
                 }
             }
             is SubscribeStatus.Error -> {
-                Text("Erreur : ${s.message}", color = MaterialTheme.colorScheme.error)
+                Text("Error: ${s.message}", color = MaterialTheme.colorScheme.error)
                 Spacer(modifier = Modifier.height(8.dp))
                 TextButton(onClick = { viewModel.resetSubscribeStatus() }) {
-                    Text("Reessayer")
+                    Text("Retry")
                 }
             }
             is SubscribeStatus.Idle -> {}

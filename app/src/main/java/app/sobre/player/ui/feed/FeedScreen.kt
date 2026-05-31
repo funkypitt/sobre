@@ -41,7 +41,7 @@ fun FeedScreen(
     ) {
         if (episodes.isEmpty() && !isRefreshing) {
             Text(
-                text = "Aucun épisode. Abonnez-vous à des chaînes pour voir leur contenu ici.",
+                text = "No episodes. Subscribe to channels to see their content here.",
                 modifier = Modifier.padding(24.dp),
                 style = MaterialTheme.typography.bodyLarge
             )
