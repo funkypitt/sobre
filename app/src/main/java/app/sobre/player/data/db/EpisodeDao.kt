@@ -8,10 +8,10 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface EpisodeDao {
-    @Query("SELECT * FROM Episode ORDER BY publishedAt DESC")
+    @Query("SELECT * FROM Episode WHERE (durationSec IS NULL OR durationSec >= 300) ORDER BY publishedAt DESC")
     fun getAllByRecent(): Flow<List<Episode>>
 
-    @Query("SELECT * FROM Episode WHERE channelId = :channelId ORDER BY publishedAt DESC")
+    @Query("SELECT * FROM Episode WHERE channelId = :channelId AND (durationSec IS NULL OR durationSec >= 300) ORDER BY publishedAt DESC")
     fun getByChannel(channelId: String): Flow<List<Episode>>
 
     @Query("SELECT * FROM Episode WHERE isDownloaded = 1 ORDER BY publishedAt DESC")
