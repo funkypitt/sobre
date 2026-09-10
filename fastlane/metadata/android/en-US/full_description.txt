@@ -1,0 +1,15 @@
+Sobre is a text-only, audio-only player for your YouTube subscriptions.
+
+It plays only the audio of the videos published by channels you add yourself. Zero images: no thumbnails, no avatars, no icons. Zero video: the app never reads a video stream. Zero algorithmic feed: no recommendations, no trending, no Shorts, no comments, no infinite scroll. The only source of content is the list of channels you explicitly subscribed to.
+
+- Three tabs: Feed, Channels, Downloads
+- Add a channel by pasting its URL, or share the URL to Sobre
+- Import and export subscriptions as OPML
+- Background playback with lock-screen and Bluetooth controls
+- Download episodes for offline listening
+- Short videos (under 5 minutes) are hidden from feeds
+- High-contrast text interface, suitable for e-ink screens
+
+Feeds come from YouTube's own Atom RSS; audio streams are resolved with NewPipeExtractor. No account, no ads, no tracking.
+
+Pierre Gallaz · developed with Claude Code

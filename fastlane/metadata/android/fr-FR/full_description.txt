@@ -1,0 +1,15 @@
+Sobre est un lecteur 100 % texte et audio seulement pour vos abonnements YouTube.
+
+Il lit uniquement l'audio des vidéos publiées par les chaînes que vous ajoutez vous-même. Zéro image : ni miniature, ni avatar, ni icône. Zéro vidéo : l'application ne lit jamais un flux vidéo. Zéro flux algorithmique : pas de recommandations, pas de tendances, pas de Shorts, pas de commentaires, pas de défilement infini. La seule source de contenu est la liste des chaînes auxquelles vous vous êtes explicitement abonné.
+
+- Trois onglets : Flux, Chaînes, Téléchargements
+- Ajout d'une chaîne en collant son URL, ou en la partageant vers Sobre
+- Import et export des abonnements au format OPML
+- Lecture en arrière-plan avec commandes sur l'écran de verrouillage et en Bluetooth
+- Téléchargement des épisodes pour l'écoute hors ligne
+- Les vidéos courtes (moins de 5 minutes) sont masquées des flux
+- Interface texte à fort contraste, adaptée aux écrans e-ink
+
+Les flux proviennent des RSS Atom de YouTube ; les flux audio sont résolus avec NewPipeExtractor. Sans compte, sans publicité, sans pistage.
+
+Pierre Gallaz · développé avec Claude Code

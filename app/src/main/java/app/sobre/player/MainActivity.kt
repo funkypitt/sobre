@@ -30,6 +30,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import app.sobre.player.data.db.Channel
 import app.sobre.player.data.db.Episode
@@ -219,6 +221,14 @@ fun TabsScreen(
                             Text("Import OPML")
                         }
                     }
+                    Text(
+                        text = stringResource(R.string.credits),
+                        style = MaterialTheme.typography.labelMedium,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 8.dp)
+                    )
                 }
                 2 -> DownloadsScreen(
                     viewModel = viewModel,
