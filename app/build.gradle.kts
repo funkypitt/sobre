@@ -79,7 +79,7 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
     // NewPipeExtractor
-    implementation("com.github.TeamNewPipe:NewPipeExtractor:v0.26.2")
+    implementation("com.github.TeamNewPipe:NewPipeExtractor:v0.26.5")
 
     // Core
     implementation("androidx.core:core-ktx:1.15.0")
