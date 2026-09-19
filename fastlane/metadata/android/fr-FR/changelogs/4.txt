@@ -1,0 +1,6 @@
+yt-dlp en secours : quand NewPipe ne trouve plus l'audio (YouTube change ses
+signatures sans prévenir), yt-dlp prend le relais pour la lecture et pour le
+téléchargement — et va chercher sa propre mise à jour sur le téléphone, une fois
+par semaine et tout de suite après un refus 403. L'app se répare donc toute seule
+au lieu d'attendre une nouvelle version. Les fichiers téléchargés gardent enfin
+l'extension de la piste choisie.

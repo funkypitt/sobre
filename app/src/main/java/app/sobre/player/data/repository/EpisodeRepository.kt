@@ -1,8 +1,10 @@
 package app.sobre.player.data.repository
 
+import android.content.Context
 import android.util.Log
 import app.sobre.player.data.db.Episode
 import app.sobre.player.data.db.EpisodeDao
+import app.sobre.player.data.extractor.Ytdlp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
@@ -27,7 +29,11 @@ data class Chapter(
     val startTimeSec: Int
 )
 
+/** Thrown for what Sobre will not play at all, as opposed to what it merely failed to find. */
+class LiveStreamException : IllegalStateException("Live streams are not supported")
+
 class EpisodeRepository(
+    private val context: Context,
     private val episodeDao: EpisodeDao,
     private val httpClient: OkHttpClient,
     private val audioDir: File
@@ -40,15 +46,41 @@ class EpisodeRepository(
 
     suspend fun getEpisode(videoId: String): Episode? = episodeDao.getById(videoId)
 
+    /**
+     * Where to listen from, and what is known about it.
+     *
+     * NewPipe first: it is quick and it costs nothing. When YouTube changes its signatures a
+     * NewPipe that has not been rebuilt finds nothing at all, and the application looks broken
+     * until a new version is published — so yt-dlp, which fetches its own new version on the
+     * telephone, is asked next. A live stream is not a failure but a refusal, and is not retried.
+     */
     suspend fun resolveStreamDetails(videoId: String): Result<StreamDetails> =
         withContext(Dispatchers.IO) {
+            val viaNewPipe = fromNewPipe(videoId)
+            val failure = viaNewPipe.exceptionOrNull()
+            if (failure == null || failure is LiveStreamException) return@withContext viaNewPipe
+            Log.w("Sobre", "NewPipe n'a rien trouvé (${failure.message}) : on passe à yt-dlp")
+            runCatching {
+                val audio = Ytdlp.audio(context, videoId)
+                val stored = episodeDao.getById(videoId)
+                val description = audio.description.ifBlank { stored?.description.orEmpty() }
+                val durationSec = audio.durationSec ?: stored?.durationSec
+                episodeDao.updateDetails(videoId, description, durationSec)
+                StreamDetails(
+                    description = description,
+                    durationSec = durationSec,
+                    audioUrl = audio.url,
+                    chapters = parseChaptersFromDescription(description),
+                )
+            }
+        }
+
+    private suspend fun fromNewPipe(videoId: String): Result<StreamDetails> =
             try {
                 val url = "https://www.youtube.com/watch?v=$videoId"
                 val info = StreamInfo.getInfo(ServiceList.YouTube, url)
 
-                if (info.streamType == StreamType.LIVE_STREAM) {
-                    throw IllegalStateException("Live streams are not supported")
-                }
+                if (info.streamType == StreamType.LIVE_STREAM) throw LiveStreamException()
 
                 Log.d("Sobre", "StreamType: ${info.streamType}")
                 Log.d("Sobre", "Audio streams: ${info.audioStreams.size}")
@@ -89,33 +121,36 @@ class EpisodeRepository(
             } catch (e: Exception) {
                 Result.failure(e)
             }
-        }
 
-    suspend fun download(videoId: String): Result<Unit> = withContext(Dispatchers.IO) {
-        try {
-            val url = "https://www.youtube.com/watch?v=$videoId"
-            val info = StreamInfo.getInfo(ServiceList.YouTube, url)
-
-            val downloadUrl = resolveAudioUrl(info)
-                ?: throw IllegalStateException("No downloadable stream")
-
-            val ext = "m4a"
-            val file = File(audioDir, "$videoId.$ext")
-            audioDir.mkdirs()
-
-            val request = Request.Builder().url(downloadUrl).build()
-            val response = httpClient.newCall(request).execute()
-            response.body?.byteStream()?.use { input ->
-                file.outputStream().use { output ->
-                    input.copyTo(output)
-                }
-            }
-
+    /**
+     * Keep one episode on the telephone. NewPipe's address over HTTP first; if that address
+     * cannot be had, or the server refuses it, yt-dlp brings the track down itself — and the
+     * file keeps the extension of whatever track was chosen rather than being called m4a
+     * whatever it is.
+     */
+    suspend fun download(videoId: String, onProgress: (Int) -> Unit = {}): Result<Unit> =
+        withContext(Dispatchers.IO) {
+            val file = runCatching { overHttp(videoId) }.recoverCatching { failure ->
+                Log.w("Sobre", "Téléchargement par NewPipe manqué (${failure.message}) : on passe à yt-dlp")
+                Ytdlp.download(context, videoId, audioDir, onProgress)
+            }.getOrElse { return@withContext Result.failure(it) }
             episodeDao.markDownloaded(videoId, file.absolutePath)
             Result.success(Unit)
-        } catch (e: Exception) {
-            Result.failure(e)
         }
+
+    private fun overHttp(videoId: String): File {
+        val url = "https://www.youtube.com/watch?v=$videoId"
+        val info = StreamInfo.getInfo(ServiceList.YouTube, url)
+        val downloadUrl = resolveAudioUrl(info) ?: throw IllegalStateException("No downloadable stream")
+        audioDir.mkdirs()
+        val file = File(audioDir, "$videoId.m4a")
+        val response = httpClient.newCall(Request.Builder().url(downloadUrl).build()).execute()
+        response.use {
+            if (!it.isSuccessful) throw IllegalStateException("HTTP ${it.code}")
+            val body = it.body ?: throw IllegalStateException("réponse vide")
+            body.byteStream().use { input -> file.outputStream().use { output -> input.copyTo(output) } }
+        }
+        return file
     }
 
     suspend fun deleteDownload(videoId: String) {

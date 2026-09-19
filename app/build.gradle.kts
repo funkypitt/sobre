@@ -13,9 +13,15 @@ android {
         applicationId = "app.sobre.player"
         minSdk = 26
         targetSdk = 35
-        versionCode = 3
-        versionName = "0.1.2"
+        versionCode = 4
+        versionName = "0.1.3"
+        // yt-dlp carries its own Python, one copy per architecture. Two are kept — the
+        // telephone's and the emulator's — rather than the four the library ships with.
+        ndk { abiFilters += listOf("arm64-v8a", "x86_64") }
     }
+
+    // Where the packaged native libraries get stripped.
+    ndkVersion = "27.1.12297006"
 
     buildTypes {
         release {
@@ -64,6 +70,11 @@ dependencies {
     implementation("androidx.room:room-runtime:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
     ksp("androidx.room:room-compiler:2.6.1")
+
+    testImplementation("junit:junit:4.13.2")
+
+    // yt-dlp, the fallback when NewPipe no longer finds the audio (GPL-3.0, like NewPipe).
+    implementation("io.github.junkfood02.youtubedl-android:library:0.18.1")
 
     // Media3 / ExoPlayer
     implementation("androidx.media3:media3-exoplayer:1.5.1")

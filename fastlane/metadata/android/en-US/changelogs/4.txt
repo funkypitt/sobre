@@ -1,0 +1,5 @@
+yt-dlp as a fallback: when NewPipe no longer finds the audio (YouTube changes its
+signatures without warning), yt-dlp takes over for playing and for downloading —
+and fetches its own new version on the telephone, once a week and at once after a
+403. The app repairs itself instead of waiting for a new release. Downloaded files
+now keep the extension of the track that was chosen.

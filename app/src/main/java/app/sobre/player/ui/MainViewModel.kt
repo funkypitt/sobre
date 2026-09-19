@@ -34,6 +34,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     )
 
     val episodeRepo = EpisodeRepository(
+        context = application,
         episodeDao = db.episodeDao(),
         httpClient = httpClient,
         audioDir = File(application.filesDir, "audio")
