@@ -1,3 +1,5 @@
+![Sobre](docs/banner.png)
+
 # Sobre
 
 Lecteur audio des abonnements YouTube, 100 % texte. Sobre lit **uniquement l'audio**
